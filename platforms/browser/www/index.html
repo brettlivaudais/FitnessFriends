@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/old-onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="init.js"></script>
+  <script src="sample_data.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"><script src="ks.js"></script>
+</head>
+<body>
+  <style>
+    .right-pill {
+        float:right;
+        font-size: 14px;
+        background-color: #009688;
+        border: none;
+        color: #ffffff;
+        padding: 5px 5px;
+        border-radius: 16px;
+    }
+  </style>
+  
+  <ons-navigator id="appNavigator" swipeable swipe-target-width="80px">
+  <ons-page>
+    <ons-splitter id="appSplitter">
+      <ons-splitter-side id="sidemenu" page="sidemenu.html" swipeable side="right" collapse="" width="260px"></ons-splitter-side>
+      <ons-splitter-content page="tabbar.html"></ons-splitter-content>
+    </ons-splitter>
+  </ons-page>
+</ons-navigator>
+  
+  <!--
+  <ons-toast id="myToast" animation="ascend">
+      You have three new messages!
+      <button onclick='myToast.hide();'>ok</button>
+  </ons-toast>
+  -->
+  
+  
+  <ons-toast id="top-toast" animation="fall">
+    <div id="top-toast-msg"></div>
+    <button onclick="$('#top-toast').hide()">ok</button>
+  </ons-toast>
+  
+    
+
+<template id="tabbar.html">
+  <ons-page id="tabbar-page">
+    <ons-toolbar>
+      <div class="center">Home</div>
+      <div class="right">
+        <ons-toolbar-button onclick="fn.toggleMenu()">
+          <ons-icon icon="ion-navicon, material:md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+    </ons-toolbar>
+    <ons-tabbar swipeable id="appTabbar" position="auto">
+      <ons-tab label="Home" icon="fa-home" page="home.html" active></ons-tab>
+      <ons-tab label="People" icon="fa-user-circle" page="people.html"></ons-tab>
+      <ons-tab label="Groups" icon="fa-users" page="groups.html"></ons-tab>
+      <ons-tab label="Events" icon="fa-calendar" page="events.html"></ons-tab>
+    </ons-tabbar>
+    
+    
+
+    
+    
+    <script>
+      ons.getScriptPage().addEventListener('prechange', function(event) {
+        if (event.target.matches('#appTabbar')) {
+          event.currentTarget.querySelector('ons-toolbar .center').innerHTML = event.tabItem.getAttribute('label');
+        }
+      });
+    </script>
+  </ons-page>
+</template>
+
+<template id="sidemenu.html">
+  <ons-page>
+    <div class="profile-pic">
+      <img src="https://monaca.io/img/logos/download_image_onsenui_01.png">
+    </div>
+
+    <ons-list-title>Get Social</ons-list-title>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "your-messages.html", "title": "&nbsp;&nbsp;&nbsp;Your Messages"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-envelope"></ons-icon>
+        </div>
+        <div class="center">
+          Your Messages
+        </div>
+    </ons-list>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "your-events.html", "title": "&nbsp;&nbsp;&nbsp;Your Events"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-calendar"></ons-icon>
+        </div>
+        <div class="center">
+          Your Events
+        </div>
+        
+    </ons-list>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "your-groups.html", "title": "&nbsp;&nbsp;&nbsp;Your Groups"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-users"></ons-icon>
+        </div>
+        <div class="center">
+          Your Groups
+        </div>
+        
+    </ons-list>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "your-friends.html"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-user-friends"></ons-icon>
+        </div>
+        <div class="center">
+          Your Friends
+        </div>
+        
+    </ons-list>
+    <ons-list>
+      <ons-list-item onclick='goPage({"id": "profile.html", "person_id": 2})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-user"></ons-icon>
+        </div>
+        <div class="center">
+          Your Profile
+        </div>
+        
+    </ons-list>
+    
+     <ons-list-title>Manage Your Info</ons-list-title>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "manage-profile.html", "title": "&nbsp;&nbsp;&nbsp;Manage Profile"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-user-cog"></ons-icon>
+        </div>
+        <div class="center">
+          Manage Profile
+        </div>
+        
+    </ons-list>
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "manage-gyms.html", "title": "&nbsp;&nbsp;&nbsp;Your Gyms"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-dumbbell"></ons-icon>
+        </div>
+        <div class="center">
+          Manage Your Gyms
+        </div>
+        
+    </ons-list>
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "manage-activities.html", "title": "&nbsp;&nbsp;&nbsp;Your Activities"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-running"></ons-icon>
+        </div>
+        <div class="center">
+          Manage Activities
+        </div>
+        
+    </ons-list>
+    
+    <ons-list>
+      <ons-list-item onclick='fn.pushPage({"id": "manage-settings.html", "title": "&nbsp;&nbsp;&nbsp;Settings"})'>
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-cog"></ons-icon>
+        </div>
+        <div class="center">
+          Settings
+        </div>
+        
+    </ons-list>
+    
+    
+    <ons-list-title>Information</ons-list-title>
+    <ons-list>
+      <ons-list-item onclick="fn.loadLink('https://google.com')">
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-pen-square"></ons-icon>
+        </div>
+        <div class="center">
+          Contact Us
+        </div>
+    </ons-list>
+    <ons-list>
+      <ons-list-item onclick="fn.loadLink('https://google.com')">
+        <div class="left">
+          <ons-icon fixed-width class="list-item__icon" icon="fa-info-circle"></ons-icon>
+        </div>
+        <div class="center">
+          Help
+        </div>
+    </ons-list>
+
+
+
+
+
+
+    
+
+    <script>
+      ons.getScriptPage().onInit = function() {
+        // Set ons-splitter-side animation
+        this.parentElement.setAttribute('animation', ons.platform.isAndroid() ? 'overlay' : 'reveal');
+      };
+    </script>
+
+    <style>
+      .profile-pic {
+        width: 200px;
+        background-color: #fff;
+        margin: 20px auto 10px;
+        border: 1px solid #999;
+        border-radius: 4px;
+      }
+
+      .profile-pic > img {
+        display: block;
+        max-width: 100%;
+      }
+
+      ons-list-item {
+        color: #444;
+      }
+    </style>
+  </ons-page>
+</template>
+
+
+
+
+
+
+<template id="home.html">
+  <ons-page  on-infinite-scroll="fn.loadMore">
+    <ons-pull-hook id="pull-hook" threshold-height="120px">
+      <ons-icon id="pull-hook-icon" size="22px" class="pull-hook-content" icon="fa-arrow-down"></ons-icon>
+    </ons-pull-hook>
+    <style>
+      .intro {
+        text-align: center;
+        padding: 0 20px;
+        margin-top: 40px;
+      }
+
+      ons-card {
+        cursor: pointer;
+        color: #333;
+      }
+
+      .card__title,
+      .card--material__title {
+        font-size: 20px;
+      } 
+        
+      .pull-hook-content {
+        color: #666;
+        transition: transform .25s ease-in-out;
+      }
+      
+      .thumbnail {
+            float: left;
+        clear: left;
+        padding-right: 5px;
+    }
+    
+    .thumbnail img {
+        border-radius: 50%;
+    }
+    </style>
+    <p class="intro">
+        <section style="margin: 0 16px">
+            <ons-button id="status-post" class="button-margin" style="float:right;margin-top:-5px" onClick="post_status()">Post</ons-button>
+            <ons-input id="status-input" float maxlength="140" placeholder="Update Status"></ons-input>
+        </section>
+    </p>
+    <div id="wall"></div>
+    <script>
+        var pullHook = document.getElementById('pull-hook');
+        var icon = document.getElementById('pull-hook-icon');
+        pullHook.addEventListener('changestate', function (event) {
+          switch (event.state) {
+            case 'initial':
+              icon.setAttribute('icon', 'fa-arrow-down');
+              icon.removeAttribute('rotate');
+              icon.removeAttribute('spin');
+              break;
+            case 'preaction':
+              icon.setAttribute('icon', 'fa-arrow-down');
+              icon.setAttribute('rotate', '180');
+              icon.removeAttribute('spin');
+              break;
+            case 'action':
+              icon.setAttribute('icon', 'fa-spinner');
+              icon.removeAttribute('rotate');
+              icon.setAttribute('spin', true);
+              break;
+          }
+        });
+        
+        pullHook.onAction = function (done) {
+          setTimeout(function() {
+            $("#wall").html('');
+            friendwall();
+            done();
+          }, 400);
+        }
+        
+        window.fn.loadMore = function (done) {
+          setTimeout(function() {
+            friendwall();
+            done();
+          }, 600)
+        }
+
+        ons.getScriptPage().onInit = function () {
+            friendwall();
+            //myToast.toggle();
+        };
+
+    </script>
+  </ons-page>
+</template>
+
+<template id="people.html">
+  <ons-page id="forms-page" on-infinite-scroll="fn.loadMore2">
+   <div id="people-search" style="display:none">
+   <ons-list>
+    
+    <style>
+          ons-search-input {
+            width: 100%;
+            font-size: 22px;
+          }
+    </style>
+    
+    <ons-list-item>
+        <ons-search-input placeholder="Search Name" id="people_search" ></ons-search-input>
+    </ons-list-item>
+    
+    
+    <ons-list-item>
+        <label class="center" for="switch1">
+          Search My Gyms Only
+        </label>
+        <div class="right">
+          <ons-switch id="people_gyms" input-id="switch1" checked="true"></ons-switch>
+        </div>
+    </ons-list-item>
+    <ons-list-item>
+        <label class="center" for="switch1">
+          Gender
+        </label>
+        <div class="right">
+            <ons-select id="people_gender">
+                <option value="">Any</option>
+                <option value="M">Men Only</option>
+                <option value="F">Women Only</option>
+            </ons-select>
+        </div>
+    </ons-list-item>
+    <ons-list-header>Max Distance</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col>
+            <ons-range id="people_distance" value="75" style="width: 100%;"></ons-range>
+          </ons-col>
+        </ons-row>
+        <span id="volume-value">&nbsp;75</span>&nbsp;Miles<span id="careful-message" style="display: none">&nbsp;or more</span>
+      </ons-list-item>
+    </ons-list>
+   </div>
+    <ons-button modifier="large" class="button-margin" id="adv-srch">Advanced Search</ons-button> 
+    
+    <div id="people"></div>
+
+    <center>
+      <div style="height: 50px">
+         <ons-progress-circular id="people-loader" class="progressStyle center" indeterminate></ons-progress-circular>
+      </div>
+    </center>
+    
+    
+    <script>
+        $("#adv-srch").click( function() {
+                if ($(this).text()=="Advanced Search") {
+                    $("#people-search").slideDown();
+                    $(this).html("Search");
+                } else {
+                    $("#people-search").slideUp();
+                    $(this).text("Advanced Search");
+                    $("#people").html('');
+                    people();
+                }
+        });
+        
+        window.fn.loadMore2 = function (done) {
+          $("#people-loader").fadeIn();
+          setTimeout(function() {
+            people($("#people > ons-card").length);
+            done();
+          }, 600)
+        }
+        
+        ons.getScriptPage().onShow = function () {
+          try {
+              attributes = (typeof this.data.page !== 'undefined') ?  this.data.page : [];
+          }
+          catch(err) {
+               attributes = [];
+          }
+          people(attributes);
+        };
+        
+        
+        
+        document.getElementById('people_distance').addEventListener('input', function (event) {
+          document.getElementById('volume-value').innerHTML = `&nbsp;${event.target.value}`;
+          if (event.target.value >= 100) {
+            document.getElementById('careful-message').style.display = 'inline-block';
+          } else {
+            document.getElementById('careful-message').style.display = 'none';
+          }
+        })
+        
+        
+    </script> 
+  </ons-page>
+</template>
+
+<template id="groups.html">
+  <ons-page>
+  <div id="group-search" style="display:none">
+   <ons-list>
+    <style>
+          ons-search-input {
+            width: 100%;
+            font-size: 22px;
+          }
+    </style>
+    <ons-list-item>
+        <ons-search-input placeholder="Search Groups" id="group_search" ></ons-search-input>
+    </ons-list-item>
+    <ons-list-item>
+        <label class="center" for="group_activity">
+          My Activities Only
+        </label>
+        <div class="right">
+          <ons-switch id="group_activity_sw" input-id="group_activity" checked="true"></ons-switch>
+        </div>
+    </ons-list-item>
+  
+    <ons-list-item>
+        <label class="center" for="group_local">
+          Local Groups Only
+        </label>
+        <div class="right">
+          <ons-switch id="group_local_sw" input-id="group_local" checked="true"></ons-switch>
+        </div>
+    </ons-list-item>
+    
+    <ons-list-header>Max Distance</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col>
+            <ons-range id="group_distance" value="75" style="width: 100%;"></ons-range>
+          </ons-col>
+        </ons-row>
+        <span id="volume-value2">&nbsp;75</span>&nbsp;Miles<span id="careful-message2" style="display: none">&nbsp;or more</span>
+      </ons-list-item>
+    </ons-list>
+  
+  
+   </div>
+  
+  
+  
+  
+  
+    <ons-button modifier="large" class="button-margin" id="adv-srch-group">Advanced Search</ons-button> 
+   <div id="groups"></div>
+    <ons-fab position="bottom right"  onclick='fn.pushPage({"id": "new-group.html", "title": "&nbsp;&nbsp;&nbsp;New Event"})'>
+      <ons-icon icon="fa-plus-circle" id="new-group2"></ons-icon>
+    </ons-fab> 
+    <script>
+        $("#adv-srch-group").click( function() {
+                if ($(this).text()=="Advanced Search") {
+                    $("#group-search").slideDown();
+                    $(this).text("Search");
+                } else {
+                    $("#group-search").slideUp();
+                    $(this).text("Advanced Search");
+                    $("#groups").text('');
+                    groups();
+                }
+        });
+        
+
+        
+        window.fn.loadMore = function (done) {
+          setTimeout(function() {
+            groups();
+            done();
+          }, 600)
+        }
+        ons.getScriptPage().onInit = function () {
+            groups();
+        };
+        
+        
+    </script> 
+  </ons-page>
+</template>
+
+
+<template id="events.html">
+  <ons-page>
+  <div id="event-search" style="display:none">
+   <ons-list>
+    <style>
+          ons-search-input {
+            width: 100%;
+            font-size: 22px;
+          }
+    </style>
+    <ons-list-item>
+        <ons-search-input placeholder="Search Event" ></ons-search-input>
+    </ons-list-item>
+    <ons-list-item>
+        <label class="center" for="switch1">
+          Search My Activities Only
+        </label>
+        <div class="right">
+          <ons-switch id="model-switch" input-id="switch1" checked="true"></ons-switch>
+        </div>
+    </ons-list-item>
+    <ons-list-header>Max Distance</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col>
+            <ons-range id="range-slider2" value="75" style="width: 100%;"></ons-range>
+          </ons-col>
+        </ons-row>
+        <span id="volume-value2">&nbsp;75</span>&nbsp;Miles<span id="careful-message2" style="display: none">&nbsp;or more</span>
+      </ons-list-item>
+    </ons-list>
+   </div>
+    <ons-button modifier="large" class="button-margin" id="adv-srch-event">Advanced Search</ons-button> 
+    
+    <div id="events"></div>
+    
+    <ons-fab position="bottom right"  onclick='fn.pushPage({"id": "new-event.html", "title": "&nbsp;&nbsp;&nbsp;New Event"})'>
+      <ons-icon icon="fa-plus-circle" id="new-event2"></ons-icon>
+    </ons-fab> 
+     
+    <script>
+        $("#adv-srch-event").click( function() {
+                if ($(this).text()=="Advanced Search") {
+                    $("#event-search").slideDown();
+                    $(this).html("Search");
+                } else {
+                    $("#event-search").slideUp();
+                    $(this).text("Advanced Search");
+                    $("#events").html('');
+                    events();
+                }
+        });
+        
+        window.fn.loadMore = function (done) {
+          setTimeout(function() {
+            events();
+            done();
+          }, 600)
+        }
+        ons.getScriptPage().onInit = function () {
+            events();
+        };
+        
+        document.getElementById('range-slider2').addEventListener('input', function (event) {
+          document.getElementById('volume-value2').innerHTML = `&nbsp;${event.target.value}`;
+          if (event.target.value >= 100) {
+            document.getElementById('careful-message2').style.display = 'inline-block';
+          } else {
+            document.getElementById('careful-message2').style.display = 'none';
+          }
+        })
+        
+        
+    </script> 
+  </ons-page>
+</template>
+
+
+
+
+
+<template id="your-messages.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">
+          Your Messages
+      </div>
+    </ons-toolbar>
+    <ons-list id="message-list">
+    </ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           $("#new-messages").parent().parent().fadeOut();
+           //myToast.hide();
+           messageList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+
+<template id="message.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center" id="person_message"></div>
+    </ons-toolbar>
+    <ons-list id="person_messages"></ons-list>
+    
+    <style>
+          #container {
+              display: table;
+              width: 100%;
+              background-color:#eeeeee;
+          }
+          #temp {
+              display: table-row;
+          }
+          #text {
+              padding: 0 7px;
+              width: 100%;
+          }
+          #text, #btn {
+              display: table-cell;
+          }
+          #text input {
+              width: 100%;
+          }
+    </style>
+    <div id="container">
+        <div id="temp">
+            <div id="text"><ons-input id="send_message" modifier="underbar" placeholder="Send Message" style="width:100%" maxlength="255"></ons-input></div>
+            <div id="btn"><ons-button onclick="sendMessage(window.current_person)"><i class="fas fa-paper-plane"></i></ons-button></div>
+        </div>
+    </div>
+    
+    <script>
+         ons.getScriptPage().onInit = function () {
+           getUserMessages(this.data.page.person_id);
+           window.current_person = this.data.page.person_id;
+           $("#person_message").text(this.data.page.display_name);
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+
+
+
+
+
+<template id="your-events.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+    <ons-list id="event-list">
+    </ons-list>
+    
+  <ons-fab position="bottom right"  onclick='fn.pushPage({"id": "new-event.html", "title": "&nbsp;&nbsp;&nbsp;New Event"})'>
+    <ons-icon icon="fa-plus-circle" id="new-event"></ons-icon>
+  </ons-fab>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           eventList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<template id="your-groups.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+    <ons-list id="group-list">
+    </ons-list>
+    
+  <ons-fab position="bottom right"  onclick='fn.pushPage({"id": "new-group.html", "title": "&nbsp;&nbsp;&nbsp;New Group"})'>
+    <ons-icon icon="fa-plus-circle" id="new-group"></ons-icon>
+  </ons-fab>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           groupList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<template id="your-friends.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">
+        &nbsp;&nbsp;&nbsp;Your Friends
+      </div>
+    </ons-toolbar>
+    <ons-list id="friend-list">
+    </ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           friendList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+
+
+
+<template id="profile.html">
+  <ons-page style="background-color:#eeeeee" id="profile">
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center" id="profile-title">
+        
+      </div>
+    </ons-toolbar>
+    
+    <ons-speed-dial id="profile-spd" position="top right" direction="down" :open.sync="spdOpen">
+      <ons-fab>
+        <ons-icon icon="fa-star"></ons-icon>
+      </ons-fab>
+      
+      <ons-speed-dial-item onclick="ons.notification.confirm('Are you sure you want to send Jamie a friend request?')">
+        <ons-icon icon="fa-heart"></ons-icon>
+      </ons-speed-dial-item>
+      <ons-speed-dial-item onclick="ons.notification.confirm('Are you sure you want to unfriend Jamie?')">
+        <ons-icon icon="fa-user-slash"></ons-icon>
+      </ons-speed-dial-item>
+      
+      
+      <ons-speed-dial-item onclick="fn.showDialog('message-dialog');">
+        <ons-icon icon="fa-envelope"></ons-icon>
+      </ons-speed-dial-item>
+      <ons-speed-dial-item onclick="ons.notification.confirm('Are you sure you want to stop seeing Jamie in the search results?')">
+        <ons-icon icon="fa-ban"></ons-icon>
+      </ons-speed-dial-item>
+    </ons-speed-dial>
+    
+    
+    <ons-carousel id="carousel" swipeable auto-scroll overscrollable initial-index="0">
+      <ons-carousel-item class="carousel-item">
+        <img src="https://awesome-robot.com/ff/img/1.jpg" style="width:100%">
+      </ons-carousel-item>
+      <ons-carousel-item class="carousel-item">
+        <img src="https://awesome-robot.com/ff/img/2.jpg" style="width:100%">
+      </ons-carousel-item>
+      <ons-carousel-item class="carousel-item">
+        <img src="https://awesome-robot.com/ff/img/3.jpg" style="width:100%">
+      </ons-carousel-item>
+      <ons-carousel-item class="carousel-item">
+        <img src="https://awesome-robot.com/ff/img/4.jpg" style="width:100%">
+      </ons-carousel-item>
+    </ons-carousel>
+
+    <!--
+    <div class="dots">
+      <span id="dot0" class="dot" onclick="fn.swipe(this)">
+        &#9679;
+      </span>
+      <span id="dot1" class="dot" onclick="fn.swipe(this)">
+        &#9675;
+      </span>
+      <span id="dot2" class="dot" onclick="fn.swipe(this)">
+        &#9675;
+      </span>
+      <span id="dot3" class="dot" onclick="fn.swipe(this)">
+        &#9675;
+      </span>
+    </div>
+    -->
+    
+    <div id="profile-stats" style="font-weight: bold;text-align: center; padding: 16px 0;background-color:#eeeeee"></div>
+    
+    <ons-card>
+      <div class="content" id="profile-paragraph" style="text-align: justify;"></div>
+    </ons-card>
+    
+    
+    
+    
+    
+    <ons-list>
+        <ons-list-header>Gyms</ons-list-header>
+        <div id = "profile-gyms"></div>
+        <ons-list-header>Activities</ons-list-header>
+        <div id = "profile-activities"></div>
+        <ons-list-header>Groups</ons-list-header>
+        <div id = "profile-groups"></div>
+    </ons-list>
+
+
+    <ons-alert-dialog id="message-dialog" cancelable>
+      <div class="alert-dialog-title">Send Message</div>
+      <div class="alert-dialog-content">
+        <textarea style="width:100%" rows="8"></textarea>
+      </div>
+      <div class="alert-dialog-footer">
+        <button class="alert-dialog-button" onclick="fn.hideDialog('message-dialog')">Send</button>
+      </div>
+    </ons-alert-dialog>
+
+
+    <script>
+      ons.getScriptPage().onInit = function () {
+        loadProfile(this.data.page.person_id);
+      }
+        //
+        
+        /*
+        this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+        const carousel = document.getElementById('carousel');
+        carousel.addEventListener('postchange', function () {
+          var index = carousel.getActiveIndex();
+          const dots = document.querySelectorAll('.dot');
+          for (dot of dots) {
+            dot.innerHTML = dot.id === 'dot' + index ? '&#9679;' : '&#9675;';
+          }
+        });
+        window.fn.swipe = function (target) {
+          carousel.setActiveIndex(Number(target.id.slice(-1)));
+        }
+      }
+      
+      var timeoutID = 0;
+        window.fn.showDialog = function (id) {
+          var elem = document.getElementById(id);
+          if (id === 'popover-dialog') {
+            elem.show(infoButton);
+          } else {
+            elem.show();
+            if (id === 'modal-dialog') {
+              clearTimeout(timeoutID);
+              timeoutID = setTimeout(function() { fn.hideDialog(id) }, 2000);
+            }
+          }
+        };
+        window.fn.hideDialog = function (id) {
+          document.getElementById(id).hide();
+        };
+        */
+    </script>
+
+    <style>
+      .carousel-item {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        align-items: center;
+      }
+
+      .dots {
+        text-align: center;
+        font-size: 30px;
+        color: #ffffff;
+        position: absolute;
+        top: 267px;
+        left: 0;
+        right: 0;
+      }
+
+      .dots > span {
+        cursor: pointer;
+      }
+    </style>
+  </ons-page>
+</template>
+
+
+
+
+<template id="event.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+    <img src="http://4648-28470.el-alt.com/blog/wp-content/uploads/2018/04/hike.jpg" style="width:100%">
+    <div id="profile-paragraph" style="text-align: justify; padding: 16px">
+        <table>
+            <tr><td><b>Date:</b></td><td>10/10/2018</td></tr>
+            <tr><td><b>Location:</b></td><td>Texas Park</td></tr>
+            <tr><td><b>Host:</b></td><td>Jamie Hildreth</td></tr>
+        </table>
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. </p>
+    </div>
+    <ons-button modifier="large">I'm Going!</ons-button>
+    
+
+    <ons-list id="attendee-list">
+        <ons-list-header>Attendees</ons-list-header>
+    </ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           attendeeList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<template id="group.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+    <img src="http://4648-28470.el-alt.com/blog/wp-content/uploads/2018/04/hike.jpg" style="width:100%">
+    <div id="profile-paragraph" style="text-align: justify; padding: 16px">
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. </p>
+        <table>
+            <tr><td><b>Admin:</b></td><td>Jamie Hildreth</td></tr>
+            <tr><td><b>Location:</b></td><td>Austin, TX</td></tr>
+        </table>
+    </div>
+    <ons-button modifier="large">Join Group</ons-button>
+    <ons-list id="discussion-list">
+        <ons-list-header>Discussions</ons-list-header>
+    </ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           discussionList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<template id="discussion.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+     <div style="text-align: justify; padding: 16px">
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. </p>
+     </div>
+     
+    <ons-list id="discussion-comments"></ons-list>
+    
+    <div style="text-align: justify; padding: 16px">
+        <textarea style="width:100%" rows="8"></textarea>
+        <ons-button modifier="large">Post Comment</ons-button>
+    </div>
+    
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           discussionComments();
+         };
+    </script>
+  </ons-page>
+</template>
+
+<template id="manage-activities.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+    <ons-list id="activity-list">
+    </ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           activityList();
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<template id="manage-profile.html">
+  <ons-page id="manage-profile">
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">
+        Manage Profile
+      </div>
+    </ons-toolbar>
+
+    <style>
+      .list-item--material__center,.list-header--material {
+        background-image: none !important;
+      }
+    </style>
+
+    <ons-list style="padding-top:30px">
+      <ons-list-header>Display Name</ons-list-header>
+      <ons-list-item class="input-items">
+        <ons-input id="profile_display_name" float maxlength="20" style="width:100%" value=""></ons-input>
+      </ons-list-item>
+      
+      <ons-list-header>Your Birthday</ons-list-header>
+      <ons-list-item class="input-items">
+        <ons-input id="profile_birthdate" type="date" float style="width:100%"></ons-input>
+      </ons-list-item>
+      
+      <ons-list-header>Your Bio</ons-list-header>
+      <ons-list-item class="input-items">
+        <textarea class="textarea" id="profile_description" rows="8" style="width:100%"></textarea>
+      </ons-list-item>
+      
+      <ons-list-item class="input-items">
+        <ons-button modifier="large" class="button-margin" onClick="save_profile()">Save</ons-button>
+      </ons-list-item>
+    </ons-list>
+
+
+    <script>
+         ons.getScriptPage().onInit = function () {
+           populate_manage_profile();
+         };
+    </script>
+  </ons-page>
+</template>
+
+<template id="manage-gyms.html">
+  <ons-page on-infinite-scroll="fn.loadMoreGyms">
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">
+        Manage Gyms
+      </div>
+    </ons-toolbar>
+    
+    <ons-list-item>
+      <ons-search-input placeholder="Search Name" id="gym_search" onKeyUp ></ons-search-input>
+    </ons-list-item>
+    
+    <div id="gyms"></div>
+    <center>
+      <div style="height: 50px">
+         <ons-progress-circular id="gym-loader" class="progressStyle center" indeterminate></ons-progress-circular>
+      </div>
+    </center>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           gyms();
+         };
+         
+        $('#gym_search').keyup( function() {
+          $("#gym-loader").fadeIn();
+          $("#gyms").html('');
+          gyms();
+        });
+         
+         window.fn.loadMoreGyms = function (done) {
+          $("#gym-loader").fadeIn();
+          setTimeout(function() {
+            gyms($("#gyms > ons-card").length);
+            done();
+          }, 600)
+        }
+         
+    </script>
+  </ons-page>
+</template>
+
+
+
+<template id="gym.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center" id="gym_name">
+      </div>
+    </ons-toolbar>
+    <center>
+      <img src="" style="width:100%" id="gym_map">
+    </center>
+    <div id="profile-paragraph" style="padding: 16px">
+        <img src="" style="width:75px; float:right; margin-top:16px" id="gym_image" />
+        <p id="gym_address"></p>
+    </div>
+    <ons-button modifier="large" id="join-gym" onClick="joinGym($('#gym_id').val())">Join Gym</ons-button>
+    <ons-button modifier="large" id="leave-gym" onClick="leaveGym($('#gym_id').val())">Leave Gym</ons-button>
+    <ons-list id="discussion-list">
+        <ons-list-header>Members</ons-list-header>
+        <div id="members"></div>
+    </ons-list>
+    <input type="hidden" id="gym_id" />
+    <script>
+         ons.getScriptPage().onInit = function () {
+           getGymInfo(this.data.page.gym_id);
+           getGymMembers(this.data.page.gym_id);
+           $('#gym_id').val(this.data.page.gym_id);
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+
+
+
+
+
+
+<template id="manage-settings.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">
+        Manage Settings
+      </div>
+    </ons-toolbar>
+    <ons-list id="settingList"></ons-list>
+    <script>
+         ons.getScriptPage().onInit = function () {
+           loadSettings();
+           
+         };
+    </script>
+  </ons-page>
+</template>
+
+<template id="new-event.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    </ons-toolbar>
+
+
+    <script>
+         ons.getScriptPage().onInit = function () {
+           this.querySelector('ons-toolbar div.center').textContent = this.data.title;
+           
+         };
+    </script>
+  </ons-page>
+</template>
+
+
+<ons-modal direction="up" id="load-modal">
+  <div style="text-align: center">
+    <p>
+      <ons-icon icon="md-spinner" size="28px" spin></ons-icon>
+    </p>
+  </div>
+</ons-modal>
+
+
+
+<style>
+  ons-splitter-side[animation=overlay] {
+    border-left: 1px solid #bbb;
+  }
+</style>
+  
+  
+  
+  
+</body>
+</html>
